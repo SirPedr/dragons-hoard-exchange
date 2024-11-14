@@ -9,11 +9,14 @@ const CONVERSION_RATES: { [index in Currencies]: number } = {
 };
 
 export const convertCurrencies = (currencies: CurrencyRates): CurrencyRates => {
-  const totalSumInCopper = Object.entries(currencies).reduce((currentSum, [currency, amount]) => {
-    const conversionRate = CONVERSION_RATES[currency as keyof CurrencyRates];
+  const totalSumInCopper = Object.entries(currencies).reduce(
+    (currentSum, [currency, amount]) => {
+      const conversionRate = CONVERSION_RATES[currency as keyof CurrencyRates];
 
-    return currentSum + amount * conversionRate;
-  }, 0);
+      return currentSum + amount * conversionRate;
+    },
+    0,
+  );
 
   return {
     copper: totalSumInCopper,

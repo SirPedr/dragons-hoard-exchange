@@ -17,7 +17,9 @@ const formData = ref({
 });
 
 const onSubmit = () => {
-  const allFieldsAreEmpty = Object.values(formData.value).every((value) => !value);
+  const allFieldsAreEmpty = Object.values(formData.value).every(
+    (value) => !value,
+  );
 
   if (allFieldsAreEmpty) {
     errorMessage.value = 'You need to fill at least one field';

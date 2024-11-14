@@ -10,11 +10,25 @@ describe('ConverterForm', () => {
   it('should render all form fields', () => {
     render(ConverterForm);
 
-    expect(screen.getByRole('spinbutton', { name: 'Platinum Pieces (PP)' })).toBeInTheDocument();
-    expect(screen.getByRole('spinbutton', { name: 'Gold Pieces (GP)' })).toBeInTheDocument();
-    expect(screen.getByRole('spinbutton', { name: 'Electrum Pieces (EP)' })).toBeInTheDocument();
-    expect(screen.getByRole('spinbutton', { name: 'Silver Pieces (SP)' })).toBeInTheDocument();
-    expect(screen.getByRole('spinbutton', { name: 'Copper Pieces (CP)' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('spinbutton', { name: 'Platinum Pieces (PP)' }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('spinbutton', { name: 'Gold Pieces (GP)' }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('spinbutton', { name: 'Electrum Pieces (EP)' }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('spinbutton', { name: 'Silver Pieces (SP)' }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('spinbutton', { name: 'Copper Pieces (CP)' }),
+    ).toBeInTheDocument();
 
     const submitButton = screen.getByRole('button', { name: 'Convert' });
 
@@ -31,7 +45,9 @@ describe('ConverterForm', () => {
 
     await user.click(submitButton);
 
-    expect(screen.getByText('You need to fill at least one field')).toBeInTheDocument();
+    expect(
+      screen.getByText('You need to fill at least one field'),
+    ).toBeInTheDocument();
   });
 
   it('should call onSubmit event when user submits form', async () => {
@@ -39,11 +55,25 @@ describe('ConverterForm', () => {
 
     const { emitted } = render(ConverterForm);
 
-    const platinumPiecesInput = screen.getByRole('spinbutton', { name: 'Platinum Pieces (PP)' });
-    const goldPiecesInput = screen.getByRole('spinbutton', { name: 'Gold Pieces (GP)' });
-    const electrumPiecesInput = screen.getByRole('spinbutton', { name: 'Electrum Pieces (EP)' });
-    const silverPiecesInput = screen.getByRole('spinbutton', { name: 'Silver Pieces (SP)' });
-    const copperPiecesInput = screen.getByRole('spinbutton', { name: 'Copper Pieces (CP)' });
+    const platinumPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Platinum Pieces (PP)',
+    });
+
+    const goldPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Gold Pieces (GP)',
+    });
+
+    const electrumPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Electrum Pieces (EP)',
+    });
+
+    const silverPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Silver Pieces (SP)',
+    });
+
+    const copperPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Copper Pieces (CP)',
+    });
 
     await user.type(platinumPiecesInput, '10');
     await user.type(goldPiecesInput, '100');
@@ -73,7 +103,10 @@ describe('ConverterForm', () => {
 
     const { emitted } = render(ConverterForm);
 
-    const platinumPiecesInput = screen.getByRole('spinbutton', { name: 'Platinum Pieces (PP)' });
+    const platinumPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Platinum Pieces (PP)',
+    });
+
     const submitButton = screen.getByRole('button', { name: 'Convert' });
 
     await user.type(platinumPiecesInput, '10');
