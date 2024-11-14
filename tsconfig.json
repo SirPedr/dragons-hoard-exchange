@@ -10,10 +10,9 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-],
-"compilerOptions": {
-    "types": [
-        "@cloudflare/workers-types/2023-07-01"
-    ]
-}
+  ],
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types/2023-07-01", "@testing-library/jest-dom"]
+  },
+  "include": ["./src/tests/setup.ts"]
 }
