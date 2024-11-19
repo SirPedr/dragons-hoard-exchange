@@ -30,6 +30,10 @@ describe('ConverterForm', () => {
       screen.getByRole('spinbutton', { name: 'Copper Pieces (CP)' }),
     ).toBeInTheDocument();
 
+    expect(
+      screen.getByRole('checkbox', { name: 'Exclude Electrum' }),
+    ).toBeInTheDocument();
+
     const submitButton = screen.getByRole('button', { name: 'Convert' });
 
     expect(submitButton).toBeInTheDocument();
@@ -75,11 +79,16 @@ describe('ConverterForm', () => {
       name: 'Copper Pieces (CP)',
     });
 
+    const excludeElectrumCheckbox = screen.getByRole('checkbox', {
+      name: 'Exclude Electrum',
+    });
+
     await user.type(platinumPiecesInput, '10');
     await user.type(goldPiecesInput, '100');
     await user.type(electrumPiecesInput, '20');
     await user.type(silverPiecesInput, '30');
     await user.type(copperPiecesInput, '40');
+    await user.click(excludeElectrumCheckbox);
 
     const submitButton = screen.getByRole('button', { name: 'Convert' });
 
@@ -90,11 +99,14 @@ describe('ConverterForm', () => {
     const [[submittedData]] = emitted<Array<unknown>>('onSubmit');
 
     expect(submittedData).toEqual({
-      copper: 40,
-      electrum: 20,
-      gold: 100,
-      platinum: 10,
-      silver: 30,
+      currencies: {
+        copper: 40,
+        electrum: 20,
+        gold: 100,
+        platinum: 10,
+        silver: 30,
+      },
+      excludeElectrum: false,
     });
   });
 
@@ -116,11 +128,14 @@ describe('ConverterForm', () => {
     const [[submittedData]] = emitted<Array<unknown>>('onSubmit');
 
     expect(submittedData).toEqual({
-      copper: 0,
-      electrum: 0,
-      gold: 0,
-      platinum: 10,
-      silver: 0,
+      currencies: {
+        copper: 0,
+        electrum: 0,
+        gold: 0,
+        platinum: 10,
+        silver: 0,
+      },
+      excludeElectrum: true,
     });
   });
 });
