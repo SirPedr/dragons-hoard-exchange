@@ -1,0 +1,19 @@
+:root {
+  --color-white: #fff;
+  --color-purple-1: #191221;
+  --color-purple-2: #382447;
+  --color-purple-3: #6b14b8;
+  --color-purple-4: #b199c7;
+  --color-purple-5: #b094c7;
+
+  --color-pink-1: #ea4995;
+  --color-pink-2: #b0235775;
+}
+
+body {
+  background-color: var(--color-purple-1);
+  color: var(--color-white);
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+  margin: 0;
+}

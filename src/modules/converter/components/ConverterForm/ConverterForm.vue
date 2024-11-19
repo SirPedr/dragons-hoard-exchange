@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import CurrencyInput from '../CurrencyInput/CurrencyInput.vue';
 import type { Currencies } from '../../types';
+import FormCheckbox from '../FormCheckbox/FormCheckbox.vue';
 
 const emit = defineEmits<{
   onSubmit: [
@@ -34,6 +35,7 @@ const onSubmit = () => {
     return;
   }
 
+  errorMessage.value = null;
   emit('onSubmit', formData.value);
 };
 
@@ -79,17 +81,38 @@ const onFieldChange = (value: number, name: string) => {
       @on-input="onFieldChange"
     />
 
-    <label>
-      <input
-        type="checkbox"
-        name="excludeElectrum"
-        :checked="formData.excludeElectrum"
-        @change="formData.excludeElectrum = !formData.excludeElectrum"
-      />
-      Exclude Electrum
-    </label>
+    <FormCheckbox
+      label="Exclude Electrum"
+      :checked="formData.excludeElectrum"
+      @onChange="formData.excludeElectrum = !formData.excludeElectrum"
+    />
 
-    <p v-if="errorMessage">{{ errorMessage }}</p>
-    <button type="submit">Convert</button>
+    <p v-if="errorMessage" :class="$style.formErrorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <button type="submit" :class="$style.formSubmitButton">Convert</button>
   </form>
 </template>
+
+<style lang="css" module>
+.form-errorMessage {
+  background: var(--color-pink-2);
+  padding: 8px;
+  border: 1px solid var(--color-pink-1);
+  border-radius: 4px;
+}
+
+.form-submitButton {
+  display: block;
+  width: 100%;
+  height: 36px;
+  background-color: var(--color-purple-3);
+  margin-top: 16px;
+  font-weight: 600;
+  border: none;
+  color: var(--color-white);
+  border-radius: 4px;
+  cursor: pointer;
+}
+</style>
