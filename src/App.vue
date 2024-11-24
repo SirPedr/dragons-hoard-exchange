@@ -1,6 +1,9 @@
-<template>
-  <h1>Dragon's Hoard Exchange</h1>
+<script setup lang="ts">
+import AppHeader from './components/AppHeader/AppHeader.vue';
+</script>
 
+<template>
+  <AppHeader />
   <main>
     <RouterView />
   </main>
