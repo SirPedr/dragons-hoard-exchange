@@ -1,22 +1,31 @@
 <script lang="ts" setup>
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { distributeCurrencies } from '../../helpers/distributeCurrencies';
-import { parseConversionQuery } from '../../helpers/parseConversionQuery';
 import { DEFAULT_CURRENCY_VALUES } from '../../consts/rates.consts';
 import { capitalize } from '../../helpers/capitalize';
+import { distributeCurrencies } from '../../helpers/distributeCurrencies';
+import { parseConversionQuery } from '../../helpers/parseConversionQuery';
+import type { CurrencyMap } from '../../types';
 
 const route = useRoute();
 const router = useRouter();
+const distributedCurrencies = ref<CurrencyMap>(DEFAULT_CURRENCY_VALUES);
 
-const parsed = parseConversionQuery(route.query);
+watch(
+  () => route.query,
+  () => {
+    const parsedQuery = parseConversionQuery(route.query);
 
-if (!parsed) {
-  router.replace({ name: 'home' });
-}
+    if (!parsedQuery) {
+      router.replace({ name: 'home' });
+    }
 
-const distributedCurrencies = distributeCurrencies(
-  parsed ?? DEFAULT_CURRENCY_VALUES,
-  { ignoreElectrum: route.query.excludeElectrum === 'true' },
+    distributedCurrencies.value = distributeCurrencies(
+      parsedQuery ?? DEFAULT_CURRENCY_VALUES,
+      { ignoreElectrum: route.query.excludeElectrum === 'true' },
+    );
+  },
+  { immediate: true },
 );
 </script>
 
