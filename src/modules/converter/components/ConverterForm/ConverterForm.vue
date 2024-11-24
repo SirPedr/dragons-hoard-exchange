@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import CurrencyInput from '../CurrencyInput/CurrencyInput.vue';
-import type { Currencies } from '../../types';
+import type { ConverterFormData, Currencies, CurrencyMap } from '../../types';
 import FormCheckbox from '../FormCheckbox/FormCheckbox.vue';
 
+const props = defineProps<{
+  initialValues?: {
+    currencies: Partial<CurrencyMap>;
+  };
+}>();
+
 const emit = defineEmits<{
-  onSubmit: [
-    formData: {
-      currencies: Record<Currencies, number>;
-      excludeElectrum: boolean;
-    },
-  ];
+  onSubmit: [formData: ConverterFormData];
 }>();
 
 const errorMessage = ref<string | null>(null);
@@ -21,6 +22,7 @@ const formData = ref({
     electrum: 0,
     silver: 0,
     copper: 0,
+    ...(props.initialValues?.currencies ?? {}),
   },
   excludeElectrum: true,
 });
@@ -93,7 +95,6 @@ const onFieldChange = (value: number, name: string) => {
 
     <button type="submit" :class="$style.formSubmitButton">Convert</button>
   </form>
-  <RouterView />
 </template>
 
 <style lang="css" module>

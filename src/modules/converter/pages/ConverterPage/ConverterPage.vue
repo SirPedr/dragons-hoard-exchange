@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import ConverterForm from '../../components/ConverterForm/ConverterForm.vue';
+import { DEFAULT_CURRENCY_VALUES } from '../../consts/rates.consts';
+import { parseConversionQuery } from '../../helpers/parseConversionQuery';
 import type { ConverterFormData } from '../../types';
 
 const router = useRouter();
+const route = useRoute();
+
+const initialFormValues =
+  parseConversionQuery(route.query) ?? DEFAULT_CURRENCY_VALUES;
 
 const onSubmit = (data: ConverterFormData) => {
   router.push({
@@ -18,5 +24,9 @@ const onSubmit = (data: ConverterFormData) => {
 
 <template>
   <h1>Dragon's Hoard Exchange</h1>
-  <ConverterForm @on-submit="onSubmit" />
+  <ConverterForm
+    @on-submit="onSubmit"
+    :initialValues="{ currencies: initialFormValues }"
+  />
+  <RouterView />
 </template>
