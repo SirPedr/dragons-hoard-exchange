@@ -1,5 +1,5 @@
 import { CONVERSION_RATES } from '../../consts/rates.consts';
-import type { Currencies, CurrencyRates } from '../../types';
+import type { Currencies, CurrencyMap } from '../../types';
 import { convertToCopper } from '../convertToCopper';
 
 const allCurrencies: Currencies[] = [
@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS: Options = {
 };
 
 export const distributeCurrencies = (
-  toConvert: CurrencyRates,
+  toConvert: CurrencyMap,
   options: Options = DEFAULT_OPTIONS,
 ) => {
   const { ignoreElectrum } = options;
@@ -38,7 +38,7 @@ export const distributeCurrencies = (
     ? currenciesWithoutElectrum
     : allCurrencies;
 
-  const optimalDistribution: CurrencyRates = {
+  const optimalDistribution: CurrencyMap = {
     platinum: 0,
     gold: 0,
     electrum: 0,

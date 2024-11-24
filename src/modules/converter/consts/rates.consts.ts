@@ -7,3 +7,11 @@ export const CONVERSION_RATES: { [index in Currencies]: number } = {
   gold: 100,
   platinum: 1000,
 };
+
+export const DEFAULT_CURRENCY_VALUES = {
+  copper: 0,
+  silver: 0,
+  electrum: 0,
+  gold: 0,
+  platinum: 0,
+};

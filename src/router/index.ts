@@ -1,4 +1,5 @@
 import ConverterPage from '@/modules/converter/pages/ConverterPage/ConverterPage.vue';
+import ResultPage from '@/modules/converter/pages/ResultPage/ResultPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -8,6 +9,13 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: ConverterPage,
+      children: [
+        {
+          path: 'result',
+          name: 'result',
+          component: ResultPage,
+        },
+      ],
     },
   ],
 });

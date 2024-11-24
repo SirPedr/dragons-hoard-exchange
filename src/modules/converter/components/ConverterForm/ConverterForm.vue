@@ -93,6 +93,7 @@ const onFieldChange = (value: number, name: string) => {
 
     <button type="submit" :class="$style.formSubmitButton">Convert</button>
   </form>
+  <RouterView />
 </template>
 
 <style lang="css" module>
