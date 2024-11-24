@@ -58,11 +58,11 @@ describe('ResultPage', () => {
       excludeElectrum: 'false',
     });
 
-    expect(screen.getByText(/copper 5/i)).toBeInTheDocument();
-    expect(screen.getByText(/silver 4/i)).toBeInTheDocument();
-    expect(screen.getByText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/gold 3/i)).toBeInTheDocument();
-    expect(screen.getByText(/platinum 12/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/copper 5/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/silver 4/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/gold 3/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/platinum 12/i)).toBeInTheDocument();
   });
 
   it('should redirect to home page when query params are all invalid', async () => {
@@ -78,21 +78,21 @@ describe('ResultPage', () => {
   it('should consider remaining values as 0 when not present and at least one value is present', async () => {
     await renderResultPage({ gold: 10 });
 
-    expect(screen.getByText(/copper 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/silver 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/gold 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/platinum 1/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/copper 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/silver 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/gold 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/platinum 1/i)).toBeInTheDocument();
   });
 
   it('should ignore valid keys that cannot be converted', async () => {
     await renderResultPage({ copper: 'abobra', gold: 10 });
 
-    expect(screen.getByText(/copper 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/silver 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/gold 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/platinum 1/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/copper 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/silver 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/gold 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/platinum 1/i)).toBeInTheDocument();
   });
 
   it('should show converted values with excluded electrum', async () => {
@@ -105,11 +105,11 @@ describe('ResultPage', () => {
       excludeElectrum: 'true',
     });
 
-    expect(screen.getByText(/copper 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/silver 6/i)).toBeInTheDocument();
-    expect(screen.queryByText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/gold 0/i)).toBeInTheDocument();
-    expect(screen.getByText(/platinum 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/copper 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/silver 6/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/gold 0/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/platinum 0/i)).toBeInTheDocument();
   });
 
   it.todo('should display section with total value in USD');
