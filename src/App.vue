@@ -9,7 +9,7 @@ import AppHeader from './components/AppHeader/AppHeader.vue';
   </main>
 </template>
 
-<style>
+<style lang="css" scoped>
 main {
   position: relative;
 }

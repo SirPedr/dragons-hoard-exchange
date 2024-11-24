@@ -1,15 +1,21 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { DEFAULT_CURRENCY_VALUES } from '../../consts/rates.consts';
 import { capitalize } from '../../helpers/capitalize';
 import { distributeCurrencies } from '../../helpers/distributeCurrencies';
 import { parseConversionQuery } from '../../helpers/parseConversionQuery';
 import type { CurrencyMap } from '../../types';
+import SideMessage from '../../components/SideMessage/SideMessage.vue';
+import { convertToCopper } from '../../helpers/convertToCopper';
+import { formatCurrency } from '../../helpers/formatCurrency';
 
 const route = useRoute();
 const router = useRouter();
 const distributedCurrencies = ref<CurrencyMap>(DEFAULT_CURRENCY_VALUES);
+const amountInCopper = computed(() => {
+  return convertToCopper(distributedCurrencies.value);
+});
 
 watch(
   () => route.query,
@@ -41,6 +47,13 @@ watch(
       {{ capitalize(key) }}
       <span :class="$style.conversionResultValue">{{ value }}</span>
     </p>
+
+    <SideMessage title="Fun fact">
+      <p :class="$style.conversionResultMessage">
+        This is equivalent to approximately
+        {{ formatCurrency(amountInCopper) }}
+      </p>
+    </SideMessage>
 
     <RouterLink :to="{ name: 'home' }" :class="$style.conversionResultLink"
       >Back</RouterLink
@@ -82,6 +95,10 @@ watch(
 
 .conversionResult-value {
   color: var(--color-white);
+}
+
+.conversionResult-message {
+  margin: 0;
 }
 
 @media screen and (min-width: 768px) {

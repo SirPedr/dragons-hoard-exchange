@@ -112,5 +112,19 @@ describe('ResultPage', () => {
     expect(screen.getByLabelText(/platinum 0/i)).toBeInTheDocument();
   });
 
-  it.todo('should display section with total value in USD');
+  it('should display section with total value in USD', async () => {
+    await renderResultPage({
+      copper: 60,
+      silver: 0,
+      electrum: 0,
+      gold: 0,
+      platinum: 0,
+      excludeElectrum: 'true',
+    });
+
+    expect(screen.getByText('Fun fact')).toBeInTheDocument();
+    expect(
+      screen.getByText('This is equivalent to approximately $60.00'),
+    ).toBeInTheDocument();
+  });
 });
