@@ -110,7 +110,7 @@ const onFieldChange = (value: number, name: string) => {
   width: 100%;
   height: 36px;
   background-color: var(--color-purple-3);
-  margin-top: 16px;
+  margin-top: 24px;
   font-weight: 600;
   border: none;
   color: var(--color-white);

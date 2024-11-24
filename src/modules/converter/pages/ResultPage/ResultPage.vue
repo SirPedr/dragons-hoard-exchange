@@ -74,4 +74,14 @@ const distributedCurrencies = distributeCurrencies(
 .conversionResult-value {
   color: var(--color-white);
 }
+
+@media screen and (min-width: 768px) {
+  .conversionResult {
+    position: static;
+  }
+
+  .conversionResult-link {
+    display: none;
+  }
+}
 </style>

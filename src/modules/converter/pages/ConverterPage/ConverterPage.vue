@@ -23,10 +23,11 @@ const onSubmit = (data: ConverterFormData) => {
 </script>
 
 <template>
-  <h1>Dragon's Hoard Exchange</h1>
-  <ConverterForm
-    @on-submit="onSubmit"
-    :initialValues="{ currencies: initialFormValues }"
-  />
+  <section>
+    <ConverterForm
+      @on-submit="onSubmit"
+      :initialValues="{ currencies: initialFormValues }"
+    />
+  </section>
   <RouterView />
 </template>
