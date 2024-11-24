@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import ConverterForm from '../../components/ConverterForm/ConverterForm.vue';
+import type { ConverterFormData } from '../../consts/converterForm.consts';
 import { DEFAULT_CURRENCY_VALUES } from '../../consts/rates.consts';
 import { parseConversionQuery } from '../../helpers/parseConversionQuery';
-import type { ConverterFormData } from '../../types';
 
 const router = useRouter();
 const route = useRoute();

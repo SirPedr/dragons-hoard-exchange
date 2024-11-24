@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import {
+  CONVERTER_FORM_SCHEMA,
+  type ConverterFormData,
+} from '../../consts/converterForm.consts';
+import type { Currencies, CurrencyMap } from '../../types';
 import CurrencyInput from '../CurrencyInput/CurrencyInput.vue';
-import type { ConverterFormData, Currencies, CurrencyMap } from '../../types';
 import FormCheckbox from '../FormCheckbox/FormCheckbox.vue';
 
 const props = defineProps<{
@@ -14,7 +18,7 @@ const emit = defineEmits<{
   onSubmit: [formData: ConverterFormData];
 }>();
 
-const errorMessage = ref<string | null>(null);
+const errorMessages = ref<string[] | null>(null);
 const formData = ref({
   currencies: {
     platinum: 0,
@@ -25,19 +29,21 @@ const formData = ref({
     ...(props.initialValues?.currencies ?? {}),
   },
   excludeElectrum: true,
+  partySize: 1,
 });
 
 const onSubmit = () => {
-  const allFieldsAreEmpty = Object.values(formData.value.currencies).every(
-    (value) => !value,
-  );
+  const validationResult = CONVERTER_FORM_SCHEMA.safeParse(formData.value);
 
-  if (allFieldsAreEmpty) {
-    errorMessage.value = 'You need to fill at least one field';
+  if (validationResult.error) {
+    errorMessages.value = Object.values(
+      validationResult.error.flatten().fieldErrors,
+    ).flat();
+
     return;
   }
 
-  errorMessage.value = null;
+  errorMessages.value = null;
   emit('onSubmit', formData.value);
 };
 
@@ -83,14 +89,25 @@ const onFieldChange = (value: number, name: string) => {
       @on-input="onFieldChange"
     />
 
+    <CurrencyInput
+      :value="formData.partySize"
+      label="Party size"
+      name="partySize"
+      @on-input="(value) => (formData.partySize = value)"
+    />
+
     <FormCheckbox
       label="Exclude Electrum"
       :checked="formData.excludeElectrum"
       @onChange="formData.excludeElectrum = !formData.excludeElectrum"
     />
 
-    <p v-if="errorMessage" :class="$style.formErrorMessage">
-      {{ errorMessage }}
+    <p
+      v-for="(message, index) in errorMessages"
+      :key="index"
+      :class="$style.formErrorMessage"
+    >
+      {{ message }}
     </p>
 
     <button type="submit" :class="$style.formSubmitButton">Convert</button>

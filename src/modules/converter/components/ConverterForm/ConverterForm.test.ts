@@ -31,6 +31,10 @@ describe('ConverterForm', () => {
     ).toBeInTheDocument();
 
     expect(
+      screen.getByRole('spinbutton', { name: 'Party size' }),
+    ).toBeInTheDocument();
+
+    expect(
       screen.getByRole('checkbox', { name: 'Exclude Electrum' }),
     ).toBeInTheDocument();
 
@@ -50,7 +54,31 @@ describe('ConverterForm', () => {
     await user.click(submitButton);
 
     expect(
-      screen.getByText('You need to fill at least one field'),
+      screen.getByText('You need to fill at least one currency field'),
+    ).toBeInTheDocument();
+  });
+
+  it('should show error message when user tries to submit form with party size less than 1', async () => {
+    const user = userEvent.setup();
+
+    render(ConverterForm);
+
+    const copperPiecesInput = screen.getByRole('spinbutton', {
+      name: 'Copper Pieces (CP)',
+    });
+    const partySizeInput = screen.getByRole('spinbutton', {
+      name: 'Party size',
+    });
+    const submitButton = screen.getByRole('button', { name: 'Convert' });
+
+    await user.clear(partySizeInput);
+    await user.type(partySizeInput, '0');
+
+    await user.type(copperPiecesInput, '10');
+    await user.click(submitButton);
+
+    expect(
+      screen.getByText('Party size must be greater than 0'),
     ).toBeInTheDocument();
   });
 
@@ -107,6 +135,7 @@ describe('ConverterForm', () => {
         silver: 30,
       },
       excludeElectrum: false,
+      partySize: 1,
     });
   });
 
@@ -136,6 +165,7 @@ describe('ConverterForm', () => {
         silver: 0,
       },
       excludeElectrum: true,
+      partySize: 1,
     });
   });
 });
