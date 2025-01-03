@@ -1,58 +1,52 @@
-import { CONVERSION_RATES } from '../../consts/rates.consts';
-import type { Currencies, CurrencyMap } from '../../types';
+import type { CurrencyDistribution, CurrencyMap } from '../../types';
 import { convertToCopper } from '../convertToCopper';
-
-const allCurrencies: Currencies[] = [
-  'platinum',
-  'gold',
-  'electrum',
-  'silver',
-  'copper',
-];
-
-const currenciesWithoutElectrum: Currencies[] = [
-  'platinum',
-  'gold',
-  'silver',
-  'copper',
-];
+import {
+  parseCopper,
+  type Options as ParseCopperOptions,
+} from '../parseCopper';
 
 type Options = {
-  ignoreElectrum: boolean;
-};
+  partySize: number;
+} & ParseCopperOptions;
 
 const DEFAULT_OPTIONS: Options = {
+  partySize: 1,
   ignoreElectrum: false,
 };
 
 export const distributeCurrencies = (
   toConvert: CurrencyMap,
-  options: Options = DEFAULT_OPTIONS,
-) => {
-  const { ignoreElectrum } = options;
+  options: Partial<Options> = DEFAULT_OPTIONS,
+): CurrencyDistribution => {
+  const resolvedOptions = { ...DEFAULT_OPTIONS, ...options };
+  const { partySize, ...parseCopperOptions } = resolvedOptions;
   const totalInCopper = convertToCopper(toConvert);
 
-  let remainingCopper = totalInCopper;
+  const copperPerPlayer = Math.floor(totalInCopper / partySize);
+  const remainingCopper = totalInCopper % partySize;
 
-  const currenciesToConsider = ignoreElectrum
-    ? currenciesWithoutElectrum
-    : allCurrencies;
+  const distribution = Array.from({ length: partySize }, () => copperPerPlayer);
 
-  const optimalDistribution: CurrencyMap = {
-    platinum: 0,
-    gold: 0,
-    electrum: 0,
-    silver: 0,
-    copper: 0,
-  };
-
-  for (const currency of currenciesToConsider) {
-    const rate = CONVERSION_RATES[currency];
-    const value = Math.floor(remainingCopper / rate);
-
-    optimalDistribution[currency] = value;
-    remainingCopper -= value * rate;
+  for (let i = 0; i < remainingCopper; i++) {
+    distribution[i]++;
   }
 
-  return optimalDistribution;
+  const currencyDistributionMap = new Map<number, number>();
+
+  distribution.forEach((copperPerPlayer) => {
+    const amountOfPlayersWithCurrency =
+      currencyDistributionMap.get(copperPerPlayer) ?? 0;
+
+    currencyDistributionMap.set(
+      copperPerPlayer,
+      amountOfPlayersWithCurrency + 1,
+    );
+  });
+
+  return Array.from(currencyDistributionMap.entries()).map(
+    ([copperPerPlayer, amountOfPlayers]) => ({
+      amountOfPlayers,
+      currencies: parseCopper(copperPerPlayer, parseCopperOptions),
+    }),
+  );
 };

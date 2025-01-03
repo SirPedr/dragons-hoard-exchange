@@ -1,34 +1,45 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { DEFAULT_CURRENCY_VALUES } from '../../consts/rates.consts';
-import { capitalize } from '../../helpers/capitalize';
-import { distributeCurrencies } from '../../helpers/distributeCurrencies';
-import { parseConversionQuery } from '../../helpers/parseConversionQuery';
-import type { CurrencyMap } from '../../types';
 import SideMessage from '../../components/SideMessage/SideMessage.vue';
-import { convertToCopper } from '../../helpers/convertToCopper';
+import { DEFAULT_CURRENCY_DISTRIBUTION } from '../../consts/rates.consts';
+import { createCurrencyList } from '../../helpers/createCurrencyList/createCurrencyList';
+import { distributeCurrencies } from '../../helpers/distributeCurrencies';
 import { formatCurrency } from '../../helpers/formatCurrency';
+import { parseConversionQuery } from '../../helpers/parseConversionQuery';
+import type { CurrencyDistribution } from '../../types';
+import { convertToCopper } from '../../helpers/convertToCopper';
+import { sum } from '../../helpers/sum';
 
 const route = useRoute();
 const router = useRouter();
-const distributedCurrencies = ref<CurrencyMap>(DEFAULT_CURRENCY_VALUES);
-const amountInCopper = computed(() => {
-  return convertToCopper(distributedCurrencies.value);
-});
+const distributedCurrencies = ref<CurrencyDistribution>(
+  DEFAULT_CURRENCY_DISTRIBUTION,
+);
+const amountInCopper = computed(() =>
+  sum(
+    distributedCurrencies.value.map(({ currencies }) =>
+      convertToCopper(currencies),
+    ),
+  ),
+);
 
 watch(
   () => route.query,
   () => {
     const parsedQuery = parseConversionQuery(route.query);
+    const partySize = route.query.partySize ? Number(route.query.partySize) : 1;
 
     if (!parsedQuery) {
       router.replace({ name: 'home' });
     }
 
     distributedCurrencies.value = distributeCurrencies(
-      parsedQuery ?? DEFAULT_CURRENCY_VALUES,
-      { ignoreElectrum: route.query.excludeElectrum === 'true' },
+      parsedQuery ?? DEFAULT_CURRENCY_DISTRIBUTION[0].currencies,
+      {
+        ignoreElectrum: route.query.excludeElectrum === 'true',
+        partySize,
+      },
     );
   },
   { immediate: true },
@@ -38,15 +49,26 @@ watch(
 <template>
   <section :class="$style.conversionResult">
     <h1 :class="$style.conversionResultTitle">Optimal distribution</h1>
-    <p
-      v-for="(value, key) in distributedCurrencies"
-      v-bind:key="key"
+    <div
+      v-for="(distribution, index) in distributedCurrencies"
+      v-bind:key="distribution.amountOfPlayers"
       :class="$style.conversionResultItem"
-      :aria-label="key + ' ' + value"
     >
-      {{ capitalize(key) }}
-      <span :class="$style.conversionResultValue">{{ value }}</span>
-    </p>
+      <p>
+        <strong
+          >{{ distribution.amountOfPlayers }}
+          {{
+            distribution.amountOfPlayers === 1 ? 'player' : 'players'
+          }}</strong
+        >
+        {{ distribution.amountOfPlayers > 1 ? 'get' : 'gets' }}
+        {{ createCurrencyList(distribution.currencies) }} pieces
+      </p>
+      <hr
+        v-if="index !== distributedCurrencies.length - 1"
+        :class="$style.conversionResultDivider"
+      />
+    </div>
 
     <SideMessage title="Fun fact">
       <p :class="$style.conversionResultMessage">
@@ -88,9 +110,11 @@ watch(
 }
 
 .conversionResult-item {
-  display: flex;
-  justify-content: space-between;
   color: var(--color-purple-5);
+}
+
+.conversionResult-divider {
+  border-color: var(--color-purple-1);
 }
 
 .conversionResult-value {

@@ -58,11 +58,13 @@ describe('ResultPage', () => {
       excludeElectrum: 'false',
     });
 
-    expect(screen.getByLabelText(/copper 5/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/silver 4/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/gold 3/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/platinum 12/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 player/i)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        /gets 12 platinum, 3 gold, 4 silver, and 5 copper pieces/i,
+      ),
+    );
   });
 
   it('should redirect to home page when query params are all invalid', async () => {
@@ -78,21 +80,15 @@ describe('ResultPage', () => {
   it('should consider remaining values as 0 when not present and at least one value is present', async () => {
     await renderResultPage({ gold: 10 });
 
-    expect(screen.getByLabelText(/copper 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/silver 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/gold 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/platinum 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 player/i)).toBeInTheDocument();
+    expect(screen.getByText(/gets 1 platinum pieces/i)).toBeInTheDocument();
   });
 
   it('should ignore valid keys that cannot be converted', async () => {
     await renderResultPage({ copper: 'abobra', gold: 10 });
 
-    expect(screen.getByLabelText(/copper 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/silver 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/gold 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/platinum 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 player/i)).toBeInTheDocument();
+    expect(screen.getByText(/gets 1 platinum pieces/i)).toBeInTheDocument();
   });
 
   it('should show converted values with excluded electrum', async () => {
@@ -105,11 +101,8 @@ describe('ResultPage', () => {
       excludeElectrum: 'true',
     });
 
-    expect(screen.getByLabelText(/copper 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/silver 6/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/electrum 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/gold 0/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/platinum 0/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 player/i)).toBeInTheDocument();
+    expect(screen.getByText(/gets 6 silver pieces/i)).toBeInTheDocument();
   });
 
   it('should display section with total value in USD', async () => {
@@ -125,6 +118,27 @@ describe('ResultPage', () => {
     expect(screen.getByText('Fun fact')).toBeInTheDocument();
     expect(
       screen.getByText('This is equivalent to approximately $60.00'),
+    ).toBeInTheDocument();
+  });
+
+  it('should display different sections when players get different amount of currencies', async () => {
+    await renderResultPage({
+      platinum: 0,
+      gold: 10,
+      electrum: 0,
+      silver: 5,
+      copper: 17,
+      partySize: 5,
+    });
+
+    expect(screen.getByText(/2 players/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/get 2 gold, 1 silver, and 4 copper pieces/i),
+    ).toBeInTheDocument();
+
+    expect(screen.getByText(/3 players/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/get 2 gold, 1 silver, and 3 copper pieces/i),
     ).toBeInTheDocument();
   });
 });

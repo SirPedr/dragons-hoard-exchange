@@ -4,14 +4,12 @@ import {
   CONVERTER_FORM_SCHEMA,
   type ConverterFormData,
 } from '../../consts/converterForm.consts';
-import type { Currencies, CurrencyMap } from '../../types';
+import type { Currencies } from '../../types';
 import CurrencyInput from '../CurrencyInput/CurrencyInput.vue';
 import FormCheckbox from '../FormCheckbox/FormCheckbox.vue';
 
 const props = defineProps<{
-  initialValues?: {
-    currencies: Partial<CurrencyMap>;
-  };
+  initialValues: Partial<ConverterFormData>;
 }>();
 
 const emit = defineEmits<{
@@ -26,10 +24,10 @@ const formData = ref({
     electrum: 0,
     silver: 0,
     copper: 0,
-    ...(props.initialValues?.currencies ?? {}),
   },
   excludeElectrum: true,
   partySize: 1,
+  ...props.initialValues,
 });
 
 const onSubmit = () => {

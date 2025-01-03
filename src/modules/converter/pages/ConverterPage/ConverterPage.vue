@@ -2,14 +2,16 @@
 import { useRoute, useRouter } from 'vue-router';
 import ConverterForm from '../../components/ConverterForm/ConverterForm.vue';
 import type { ConverterFormData } from '../../consts/converterForm.consts';
-import { DEFAULT_CURRENCY_VALUES } from '../../consts/rates.consts';
+import { DEFAULT_FORM_VALUES } from '../../consts/rates.consts';
 import { parseConversionQuery } from '../../helpers/parseConversionQuery';
 
 const router = useRouter();
 const route = useRoute();
 
-const initialFormValues =
-  parseConversionQuery(route.query) ?? DEFAULT_CURRENCY_VALUES;
+const x = parseConversionQuery(route.query);
+const initialFormValues: Partial<ConverterFormData> = x
+  ? { currencies: x }
+  : DEFAULT_FORM_VALUES;
 
 const onSubmit = (data: ConverterFormData) => {
   router.push({
@@ -17,6 +19,7 @@ const onSubmit = (data: ConverterFormData) => {
     query: {
       ...data.currencies,
       excludeElectrum: data.excludeElectrum.toString(),
+      partySize: data.partySize.toString(),
     },
   });
 };
@@ -24,10 +27,7 @@ const onSubmit = (data: ConverterFormData) => {
 
 <template>
   <section>
-    <ConverterForm
-      @on-submit="onSubmit"
-      :initialValues="{ currencies: initialFormValues }"
-    />
+    <ConverterForm @on-submit="onSubmit" :initialValues="initialFormValues" />
   </section>
   <RouterView />
 </template>
