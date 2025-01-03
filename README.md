@@ -26,7 +26,7 @@ Clone the repository and install dependencies:
 
 ```bash
 git clone <repository-url>
-cd dnd-currency-converter
+cd dragons-hoard-exchange
 pnpm install
 ```
 
