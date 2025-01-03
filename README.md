@@ -1,45 +1,76 @@
-# dragons-hoard-exchange
+# Dragon's hoard Exchange
 
-This template should help get you started developing with Vue 3 in Vite.
+A dead simple D&D currency converter designed to make your adventuring life easier! With this tool, you can seamlessly manage and distribute treasure across your party, convert it into optimal denominations, and even check its real-world value in USD.
 
-## Recommended IDE Setup
+---
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Features
 
-## Type Support for `.vue` Imports in TS
+- **Optimal Distribution**: Automatically calculates the best distribution of D&D currencies (gold, silver, copper, platinum) for any input value.
+- **Electrum-Free**: Electrum is ignored entirely for a smoother experience (because who likes electrum, anyway?).
+- **Party Splitting**: Divide treasure equally among party members, with leftover amounts clearly displayed.
+- **USD Conversion**: See the converted treasure value in USD for a fun perspective.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## Getting Started
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Prerequisites
 
-## Project Setup
+- **Node.js** (version 18 or higher recommended)
+- **pnpm** (installed globally on your machine)
 
-```sh
+### Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone <repository-url>
+cd dnd-currency-converter
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### Running the Project
 
-```sh
+Start the development server:
+
+```bash
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+The application will be available at `http://localhost:5174`.
 
-```sh
+### Building for Production
+
+Generate a production build:
+
+```bash
 pnpm build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Running Tests
 
-```sh
-pnpm test:unit
+Execute the test suite to ensure everything works as expected:
+
+```bash
+pnpm tests
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+---
 
-```sh
-pnpm lint
-```
+## Tech Stack
+
+- **Frontend Framework**: [Vue](https://vuejs.org/)
+- **Routing**: [vue-router](https://router.vuejs.org/)
+- **Styling**: CSS Modules for scoped styling
+- **Build Tool**: [Vite](https://vitejs.dev/)
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests. Ensure all changes pass the test suite before submitting a PR.
+
+---
+
+Enjoy treasure hunting! 🪙✨
